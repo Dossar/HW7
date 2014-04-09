@@ -68,20 +68,6 @@ class CDAccount : BankAccount{
 
 };
 
-//// Example of transfer
-//void BankAccount::transfer( BankAccount& To , double amount ) {
-//
-//	int status;
-//	status = withdraw( amount ); // Withdraw from current account. Return 0 for ok, return 1 for insufficient funds.
-//	if( status == 0 ) {
-//		To.deposit( amount ); // Deposit to an account passed in the parameter
-//		cout << "Transferred $" << amount << endl;
-//	}
-//	if( status == 1 )
-//		cout << "Insufficient funds." << endl;
-//
-//}
-
 /*********************************************************/
 /*              FUNCTION STUFF FOR CLASSES               */
 /*********************************************************/
@@ -114,7 +100,24 @@ int BankAccount::withdraw( double amount ){
     }
     // Otherwise, amount to withdraw is legitimate.
     balance -= amount;
+    return 0; // Returning 0 means the withdrawal was successful.
     
+}
+
+// Withdraw from one bank account to deposit to another.
+// If withdraw returns 0, deposit is successful.
+// If withdraw returns 1, no transfer is done.
+void BankAccount::transfer( BankAccount& To , double amount ) {
+
+	int status; // Determines if the account withdrawn from has sufficient funds or amount is valid.
+	status = withdraw( amount ); // Withdraw from current account.
+	if( status == 0 ) {
+		To.deposit( amount ); // Deposit to an account passed in the parameter
+		cout << "Transferred $" << amount << endl;
+	}
+	if( status == 1 )
+		cout << "Transfer unsuccessful." << endl;
+
 }
 
 // Overloaded output operator
@@ -142,11 +145,20 @@ int main() {
     // Create a bank account and test the input and output operators.
     BankAccount account1;
     cin >> account1;
-    // Testing deposit and withdraw
-    account1.deposit(-2);
-    account1.deposit(100.25);
-    account1.withdraw(-1);
-    account1.withdraw(300.50);
+    
+//    // Testing deposit and withdraw
+//    account1.deposit(-2);
+//    account1.deposit(100.25);
+//    account1.withdraw(-1);
+//    account1.withdraw(300.50);
+    
+    cout << account1;
+    
+    // Create a copy of account 1. Test transfer.
+    BankAccount account2 = account1;
+    account2.transfer(account1,50);
+    account2.transfer(account1,-1);
+    cout << account2;
     cout << account1;
 
     return 0;

@@ -2,7 +2,7 @@
  * File:   hw7.cpp
  * Author: Roy Van Liew and Saqib Zahid
  *
- * Last modified on April 10, 2014, 7:55 PM
+ * Last modified on April 11, 2014, 10:49 AM
  */
 
 #include <iostream>
@@ -127,14 +127,18 @@ class CDAccount : public BankAccount{
 /*              METHODS FOR BANKACCOUNT                  */
 /*********************************************************/
 
-// Add money to BankAccount.
+// Add money to BankAccount. This is inherited for all classes.
 void BankAccount::deposit( double amount ){
     
     // If the amount is negative, do not deposit.
-    if( amount < 0 )
-        cout << "Cannot deposit negative money." << endl;    
-    else
+    if( amount < 0 ){
+        cout << "Cannot deposit negative money." << endl;
+        return;
+    }
+    else{
         balance += amount;
+        cout << "Successfully deposited $" << amount << " into " << name << endl;
+    }
     
 }
 
@@ -155,11 +159,12 @@ int BankAccount::withdraw( double amount ){
     }
     // Otherwise, amount to withdraw is legitimate.
     balance -= amount;
+    cout << "Successfully withdrew $" << amount << " from " << name << endl;
     return 0; // Returning 0 means the withdrawal was successful.
     
 }
 
-// Withdraw from one bank account to deposit to another.
+// Withdraw from one bank account to deposit to another. This is inherited for all classes.
 // If withdraw returns 0, deposit is successful.
 // If withdraw returns 1, no transfer is done.
 void BankAccount::transfer( BankAccount& To , double amount ) {
@@ -208,10 +213,14 @@ int MoneyMarketAccount::withdraw( double amount ){
     }
     // Otherwise, amount to withdraw is legitimate.
     // User gets one free withdrawal. If there has been one used already, incur $1.50 penalty.
-    if( numOfWithdr == 0 )
+    if( numOfWithdr == 0 ){
         balance -= amount;
-    if( numOfWithdr > 0 )
+        cout << "Successfully withdrew $" << amount << " from " << name << endl;
+    }
+    if( numOfWithdr > 0 ){
         balance -= ( amount + 1.50 );
+        cout << "Successfully withdrew $" << ( amount + 1.50 ) << " from " << name << endl;
+    }
     numOfWithdr++;
     
     return 0; // Returning 0 means the withdrawal was successful.
@@ -253,6 +262,7 @@ int CDAccount::withdraw( double amount ){
     double penalty = (interestRate*0.25);
     interestRate -= penalty; // Subtract 25% from interest as a penalty
     balance -= ( amount + (penalty/100.0) ); // interest rate is a percentage, so divide by 100
+    cout << "Successfully withdrew $" << ( amount + (penalty/100.0) ) << " from " << name << endl;
     
     return 0; // Returning 0 means the withdrawal was successful.
     
@@ -264,7 +274,7 @@ ostream& operator <<( ostream& out, CDAccount& Account ){
     out << "Type: CD Account" << endl; // Print out what type of bank account it is
     out << "Owner: " << Account.getName() << endl;
     out << "Balance: $" << Account.getBalance() << endl;
-    out << "Interest rate: " << Account.getInterest() << endl;
+    out << "Interest rate: " << Account.getInterest() << "%" << endl;
     
 }
 
@@ -291,17 +301,46 @@ int main() {
 //    cout << account2;
 //    cout << account1;
     
-    CDAccount c1;
-    cout << c1 << endl;
-    c1.withdraw(50.00);
-    cout << c1 << endl;
-    
-    CDAccount c2(2);
-    cout << c2 << endl;
-    c2.withdraw(48.50);
-    cout << c2 << endl;
+//    CDAccount c1;
+//    cout << c1 << endl;
+//    c1.withdraw(50.00);
+//    cout << c1 << endl;
+//    
+//    CDAccount c2(2);
+//    cout << c2 << endl;
+//    c2.withdraw(48.50);
+//    cout << c2 << endl;
     
 
+    // Create the three bank accounts.
+    cout << "Creating Bank Account." << endl;
+    BankAccount BA;
+    cout << "\nCreating Money Market Account." << endl;
+    MoneyMarketAccount MMA;
+    cout << "\nCreating CD Account." << endl;
+    CDAccount CDA;
+    
+    // Test withdraw and deposit Bank Account
+    cout << BA << endl;
+    BA.withdraw(50.00);
+    cout << BA << endl;
+    BA.deposit(100.00);
+    cout << BA << endl;
+    
+    // Test withdraw and deposit Money Market Account
+    cout << MMA << endl;
+    MMA.withdraw(50.00);
+    cout << MMA << endl;
+    MMA.deposit(100.00);
+    cout << MMA << endl;  
+
+    // Test withdraw and deposit CD Account
+    cout << CDA << endl;
+    CDA.withdraw(50.00);
+    cout << CDA << endl;
+    CDA.deposit(100.00);
+    cout << CDA << endl;  
+    
     return 0;
 }
 

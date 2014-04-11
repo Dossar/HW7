@@ -46,7 +46,7 @@ class BankAccount{
     
 };
 
-// Default constructor for BankAccount, prompt use to enter in data
+// Default constructor for BankAccount, prompt user to enter in data
 BankAccount::BankAccount(){
     
     cout << "Please enter the owner of this account: ";
@@ -67,7 +67,7 @@ BankAccount::BankAccount( string accName, double amount ){
 /* MoneyMarketAccount is derived from BankAccount.
  * withdraw function is overridden so there is a withdrawal fee.
  * There is also a member variable keeping track of what's been withdrawn. */
-class MoneyMarketAccount : BankAccount{
+class MoneyMarketAccount : public BankAccount{
 
     public:
             // Default constructor for MoneyMarketAccount, prompt use to enter in data
@@ -76,9 +76,16 @@ class MoneyMarketAccount : BankAccount{
                     cout << "Please enter the number of withdrawals that have occurred: ";
                     cin >> numOfWithdr;    
             }
-            // Constructor with parameters for MoneyMarketAccount.
-            MoneyMarketAccount(string accName, double amount, int withDr);
+            // Constructor with withdrawals parameter for MoneyMarketAccount.
+            MoneyMarketAccount( int withDr ) : BankAccount()
+            {
+                    numOfWithdr = withDr;                
+            }
 
+            // Accessor for number of withdrawals
+            int getWithdr(){
+                return numOfWithdr;
+            }
             int withdraw( double amount ); // Overridden withdraw for MoneyMarketAccount
             // friend functions are not inherited.
             friend ostream& operator <<( ostream& out, const MoneyMarketAccount& Account );
@@ -87,21 +94,27 @@ class MoneyMarketAccount : BankAccount{
 
 };
 
-// Constructor with parameters for MoneyMarketAccount.
-// Extra parameter is number of withdrawals.
-MoneyMarketAccount::MoneyMarketAccount(string accName, double amount, int withDr) {
-    
-    name = accName;
-    balance = amount;
-    numOfWithdr = withDr;
-    
-}
-
 /* CDAccount is derived from BankAccount.
  * withdraw function is overridden so a penalty on interest rate is incurred. */
-class CDAccount : BankAccount{
+class CDAccount : public BankAccount{
 
     public:
+            // Default constructor for CDAccount, prompt use to enter in data
+            CDAccount() : BankAccount()
+            {
+                    cout << "Please enter interest rate (in percent): ";
+                    cin >> interestRate;    
+            }        
+            // Constructor with interest parameter for CDAccount.
+            CDAccount(double interest) : BankAccount()
+            {
+                    interestRate = interest;
+            }
+        
+            // Accessor for interest rate
+            double getInterest(){
+                return interestRate;
+            }
             int withdraw( double amount ); // Overridden withdraw for CDAccount
             // friend functions are not inherited.
             friend ostream& operator <<( ostream& out, const CDAccount& Account );            
@@ -199,18 +212,21 @@ int MoneyMarketAccount::withdraw( double amount ){
         balance -= amount;
     if( numOfWithdr > 0 )
         balance -= ( amount + 1.50 );
+    numOfWithdr++;
+    
     return 0; // Returning 0 means the withdrawal was successful.
     
 }
 
-//// Overloaded output operator for MoneyMarketAccount
-//ostream& operator <<( ostream& out, MoneyMarketAccount& Account ){
-//    
-//    out << "Type: Bank Account" << endl; // Print out what type of bank account it is
-//    out << "Owner: " << Account.getName() << endl;
-//    out << "Balance: $" << Account.getBalance() << endl;
-//    
-//}
+// Overloaded output operator for MoneyMarketAccount
+ostream& operator <<( ostream& out, MoneyMarketAccount& Account ){
+    
+    out << "Type: Money Market Account" << endl; // Print out what type of bank account it is
+    out << "Owner: " << Account.getName() << endl;
+    out << "Balance: $" << Account.getBalance() << endl;
+    out << "Withdrawal count: " << Account.getWithdr() << endl;
+    
+}
 
 /*********************************************************/
 /*              METHODS FOR CDACCOUNT                    */
@@ -236,8 +252,19 @@ int CDAccount::withdraw( double amount ){
     // Incur the 25% penalty to the interest rate and also subtract it from balance.
     double penalty = (interestRate*0.25);
     interestRate -= penalty; // Subtract 25% from interest as a penalty
-    balance -= ( amount + penalty );
+    balance -= ( amount + (penalty/100.0) ); // interest rate is a percentage, so divide by 100
+    
     return 0; // Returning 0 means the withdrawal was successful.
+    
+}
+
+// Overloaded output operator for CDAccount
+ostream& operator <<( ostream& out, CDAccount& Account ){
+    
+    out << "Type: CD Account" << endl; // Print out what type of bank account it is
+    out << "Owner: " << Account.getName() << endl;
+    out << "Balance: $" << Account.getBalance() << endl;
+    out << "Interest rate: " << Account.getInterest() << endl;
     
 }
 
@@ -246,25 +273,34 @@ int CDAccount::withdraw( double amount ){
 // Start of main. Here we create three accounts each of different types.
 int main() {
     
-    // Create a bank account and test the input and output operators.
-    BankAccount account1;
-    BankAccount account2("Luis",200);
+//    // Create a bank account and test the input and output operators.
+//    BankAccount account1;
+//    BankAccount account2("Luis",200);
 //    
 //    // Testing deposit and withdraw
 //    account1.deposit(-2);
 //    account1.deposit(100.25);
 //    account1.withdraw(-1);
 //    account1.withdraw(300.50);   
-    cout << account1;
-    cout << account2;
+//    cout << account1;
+//    cout << account2;
+//    
+//    // Test transfer.
+//    account2.transfer(account1,50);
+//    //account2.transfer(account1,-1);
+//    cout << account2;
+//    cout << account1;
     
-    // Test transfer.
-    account2.transfer(account1,50);
-    //account2.transfer(account1,-1);
-    cout << account2;
-    cout << account1;
+    CDAccount c1;
+    cout << c1 << endl;
+    c1.withdraw(50.00);
+    cout << c1 << endl;
     
-//    MoneyMarketAccount m1;
+    CDAccount c2(2);
+    cout << c2 << endl;
+    c2.withdraw(48.50);
+    cout << c2 << endl;
+    
 
     return 0;
 }

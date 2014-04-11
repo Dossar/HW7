@@ -283,35 +283,6 @@ ostream& operator <<( ostream& out, CDAccount& Account ){
 // Start of main. Here we create three accounts each of different types.
 int main() {
     
-//    // Create a bank account and test the input and output operators.
-//    BankAccount account1;
-//    BankAccount account2("Luis",200);
-//    
-//    // Testing deposit and withdraw
-//    account1.deposit(-2);
-//    account1.deposit(100.25);
-//    account1.withdraw(-1);
-//    account1.withdraw(300.50);   
-//    cout << account1;
-//    cout << account2;
-//    
-//    // Test transfer.
-//    account2.transfer(account1,50);
-//    //account2.transfer(account1,-1);
-//    cout << account2;
-//    cout << account1;
-    
-//    CDAccount c1;
-//    cout << c1 << endl;
-//    c1.withdraw(50.00);
-//    cout << c1 << endl;
-//    
-//    CDAccount c2(2);
-//    cout << c2 << endl;
-//    c2.withdraw(48.50);
-//    cout << c2 << endl;
-    
-
     // Create the three bank accounts.
     cout << "Creating Bank Account." << endl;
     BankAccount BA;
@@ -320,27 +291,86 @@ int main() {
     cout << "\nCreating CD Account." << endl;
     CDAccount CDA;
     
-    // Test withdraw and deposit Bank Account
-    cout << BA << endl;
-    BA.withdraw(50.00);
-    cout << BA << endl;
-    BA.deposit(100.00);
-    cout << BA << endl;
+//    /**** TEST WITHDRAW AND DEPOSIT FUNCTIONS ****/
+//    
+//    // Test withdraw and deposit Bank Account
+//    cout << BA << endl;
+//    BA.withdraw(50.00);
+//    cout << BA << endl;
+//    BA.deposit(100.00);
+//    cout << BA << endl;
+//    
+//    // Test withdraw and deposit Money Market Account
+//    cout << MMA << endl;
+//    MMA.withdraw(50.00);
+//    cout << MMA << endl;
+//    MMA.deposit(100.00);
+//    cout << MMA << endl;  
+//
+//    // Test withdraw and deposit CD Account
+//    cout << CDA << endl;
+//    CDA.withdraw(50.00);
+//    cout << CDA << endl;
+//    CDA.deposit(100.00);
+//    cout << CDA << endl;  
     
-    // Test withdraw and deposit Money Market Account
-    cout << MMA << endl;
-    MMA.withdraw(50.00);
-    cout << MMA << endl;
-    MMA.deposit(100.00);
-    cout << MMA << endl;  
-
-    // Test withdraw and deposit CD Account
+    /**** TEST TRANSFER FUNCTION ****/
+    
+//    // Transfer from BA to CDA
+//    cout << "\n*** Testing transfer from " << BA.getName() << " to " << CDA.getName() << " ***\n" << endl;
+//    cout << BA << endl;
+//    cout << CDA << endl;
+//    BA.transfer(CDA,50);
+//    cout << endl;
+//    cout << BA << endl;
+//    cout << CDA << endl;
+//    
+//    // Transfer from CDA to BA
+//    cout << "\n*** Testing transfer from " << CDA.getName() << " to " << BA.getName() << " ***\n" << endl;
+//    cout << CDA << endl;
+//    cout << BA << endl;
+//    CDA.transfer(BA,100);
+//    cout << endl;
+//    cout << CDA << endl;
+//    cout << BA << endl;    
+//
+//    // Transfer from BA to MMA
+//    cout << "\n*** Testing transfer from " << BA.getName() << " to " << MMA.getName() << " ***\n" << endl;
+//    cout << BA << endl;
+//    cout << MMA << endl;    
+//    BA.transfer(MMA,75);
+//    cout << endl;
+//    cout << BA << endl;
+//    cout << MMA << endl;
+//    
+//    // Transfer from MMA to BA
+//    cout << "\n*** Testing transfer from " << MMA.getName() << " to " << BA.getName() << " ***\n" << endl;
+//    cout << MMA << endl;
+//    cout << BA << endl;    
+//    MMA.transfer(BA,150);
+//    cout << endl;
+//    cout << MMA << endl;
+//    cout << BA << endl;    
+    
+    // Transfer from CDA to MMA
+    cout << "\n*** Testing transfer from " << CDA.getName() << " to " << MMA.getName() << " ***\n" << endl;
     cout << CDA << endl;
-    CDA.withdraw(50.00);
+    cout << MMA << endl;    
+    CDA.transfer(MMA,175);
+    cout << endl;
     cout << CDA << endl;
-    CDA.deposit(100.00);
-    cout << CDA << endl;  
+    cout << MMA << endl;
+    
+    // Transfer from MMA to CDA
+    cout << "\n*** Testing transfer from " << MMA.getName() << " to " << CDA.getName() << " ***\n" << endl;
+    cout << MMA << endl;
+    cout << CDA << endl;
+    MMA.transfer(CDA,200);
+    cout << endl;
+    cout << MMA << endl;
+    cout << CDA << endl;    
     
     return 0;
+    
 }
 

@@ -294,27 +294,30 @@ int main() {
 //    /**** TEST WITHDRAW AND DEPOSIT FUNCTIONS ****/
 //    
 //    // Test withdraw and deposit Bank Account
+//    cout << "\n***Testing withdraw and deposit for " << BA.getName() << "***\n" << endl;
 //    cout << BA << endl;
 //    BA.withdraw(50.00);
 //    cout << BA << endl;
 //    BA.deposit(100.00);
 //    cout << BA << endl;
 //    
-//    // Test withdraw and deposit Money Market Account
-//    cout << MMA << endl;
-//    MMA.withdraw(50.00);
-//    cout << MMA << endl;
-//    MMA.deposit(100.00);
-//    cout << MMA << endl;  
-//
-//    // Test withdraw and deposit CD Account
-//    cout << CDA << endl;
-//    CDA.withdraw(50.00);
-//    cout << CDA << endl;
-//    CDA.deposit(100.00);
-//    cout << CDA << endl;  
+    // Test withdraw and deposit Money Market Account
+    cout << "\n***Testing withdraw and deposit for " << MMA.getName() << "***\n" << endl;
+    cout << MMA << endl;
+    MMA.withdraw(50.00);
+    cout << MMA << endl;
+    MMA.deposit(100.00);
+    cout << MMA << endl;  
+
+    // Test withdraw and deposit CD Account
+    cout << "\n***Testing withdraw and deposit for " << CDA.getName() << "***\n" << endl;
+    cout << CDA << endl;
+    CDA.withdraw(50.00);
+    cout << CDA << endl;
+    CDA.deposit(100.00);
+    cout << CDA << endl;  
     
-    /**** TEST TRANSFER FUNCTION ****/
+//    /**** TEST TRANSFER FUNCTION ****/
     
 //    // Transfer from BA to CDA
 //    cout << "\n*** Testing transfer from " << BA.getName() << " to " << CDA.getName() << " ***\n" << endl;

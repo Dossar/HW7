@@ -2,7 +2,7 @@
  * File:   hw7.cpp
  * Author: Roy Van Liew and Saqib Zahid
  *
- * Last modified on April 11, 2014, 8:13 PM
+ * Last modified on April 13, 2014, 7:13 PM
  */
 
 #include <iostream>
@@ -37,6 +37,9 @@ class BankAccount{
         }
         double getBalance(){
             return balance;
+        }
+        virtual string getType(){
+            return "Bank Account";
         }
         /**** End Accessor function declarations ****/
 
@@ -92,6 +95,9 @@ class MoneyMarketAccount : public BankAccount{
             int getWithdr(){
                 return numOfWithdr;
             }
+            string getType(){
+                return "Money Market Account";
+            }
             int withdraw( double amount ); // Overridden withdraw for MoneyMarketAccount
             // friend functions are not inherited.
             friend ostream& operator <<( ostream& out, const MoneyMarketAccount& Account );
@@ -122,6 +128,9 @@ class CDAccount : public BankAccount{
             double getInterest(){
                 return interestRate;
             }
+            string getType(){
+                return "CD Account";
+            }
             int withdraw( double amount ); // Overridden withdraw for CDAccount
             // friend functions are not inherited.
             friend ostream& operator <<( ostream& out, const CDAccount& Account );            
@@ -144,7 +153,7 @@ void BankAccount::deposit( double amount ){
     }
     else{
         balance += amount;
-        cout << "Successfully deposited $" << amount << " into " << name << endl;
+        cout << "Successfully deposited $" << amount << " into " << getType() << " " << name << endl;
     }
     
 }
@@ -166,7 +175,7 @@ int BankAccount::withdraw( double amount ){
     }
     // Otherwise, amount to withdraw is legitimate.
     balance -= amount;
-    cout << "Successfully withdrew $" << amount << " from Bank Account " << name << endl;
+    cout << "Successfully withdrew $" << amount << " from " << getType() << " " << name << endl;
     return 0; // Returning 0 means the withdrawal was successful.
     
 }
@@ -181,7 +190,8 @@ void BankAccount::transfer( BankAccount& To , double amount ) {
         // If status is zero, amount is legal.
 	if( status == 0 ) {
 		To.deposit( amount ); // Deposit to an account passed in the parameter
-		cout << "Transferred $" << amount << " from " << name << " to " << To.getName() << endl;
+		cout << "Transferred $" << amount << " from " << getType() << " " << name
+                     << " to " << To.getType() << " " << To.getName() << endl;
 	}
         // Otherwise, amount was either negative or too much.
 	if( status == 1 )
@@ -222,13 +232,13 @@ int MoneyMarketAccount::withdraw( double amount ){
     // User gets one free withdrawal. If there has been one used already, incur $1.50 penalty.
     if( numOfWithdr == 0 ){
         balance -= amount;
-        cout << "Successfully withdrew $" << amount << " from Money Market Account " << name << endl;
+        cout << "Successfully withdrew $" << amount << " from " << getType() << " " << name << endl;
         numOfWithdr++;
         return 0; // Returning 0 means the withdrawal was successful.
     }
     if( numOfWithdr > 0 && ( amount + 1.50 ) <= balance ){
         balance -= ( amount + 1.50 );
-        cout << "Successfully withdrew $" << ( amount + 1.50 ) << " from Money Market Account " << name << endl;
+        cout << "Successfully withdrew $" << ( amount + 1.50 ) << " from " << getType() << " " << name << endl;
         numOfWithdr++;
         return 0; // Returning 0 means the withdrawal was successful.
     }
@@ -279,7 +289,7 @@ int CDAccount::withdraw( double amount ){
     }
     interestRate -= penalty; // Subtract 25% from interest as a penalty
     balance -= ( amount + (penalty/100.0) ); // interest rate is a percentage, so divide by 100
-    cout << "Successfully withdrew $" << ( amount + (penalty/100.0) ) << " from CD Account " << name << endl;
+    cout << "Successfully withdrew $" << ( amount + (penalty/100.0) ) << " from " << getType() << " " << name << endl;
     
     return 0; // Returning 0 means the withdrawal was successful.
     
@@ -299,17 +309,17 @@ ostream& operator <<( ostream& out, CDAccount& Account ){
 int main() {
     
     // Create the three bank accounts.
-    cout << "\nCreating Bank Account." << endl;
+    cout << "\nCreating Bank Account. The user inputs for this one." << endl;
     BankAccount BA;
-    cout << "\nCreating Money Market Account." << endl;
+    cout << "\nCreating Money Market Account with $250 and zero withdrawals." << endl;
     MoneyMarketAccount MMA("MMA",250,0);
-    cout << "\nCreating CD Account." << endl;
-    CDAccount CDA;
+    cout << "\nCreating CD Account with $500 and 50% interest rate." << endl;
+    CDAccount CDA("CDA",500,50.0);
     
     /**** TEST WITHDRAW AND DEPOSIT FUNCTIONS ****/
     
     // Test withdraw and deposit Bank Account
-    cout << "\n*** Testing withdraw and deposit for " << BA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing withdraw and deposit for " << BA.getType() << " ***\n" << endl;
     cout << BA << endl;
     BA.withdraw(50.00);
     cout << BA << endl;
@@ -317,7 +327,7 @@ int main() {
     cout << BA;
     
     // Test withdraw and deposit Money Market Account
-    cout << "\n*** Testing withdraw and deposit for " << MMA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing withdraw and deposit for " << MMA.getType() << " ***\n" << endl;
     cout << MMA << endl;
     MMA.withdraw(50.00);
     cout << MMA << endl;
@@ -325,7 +335,7 @@ int main() {
     cout << MMA;  
 
     // Test withdraw and deposit CD Account
-    cout << "\n*** Testing withdraw and deposit for " << CDA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing withdraw and deposit for " << CDA.getType() << " ***\n" << endl;
     cout << CDA << endl;
     CDA.withdraw(50.00);
     cout << CDA << endl;
@@ -335,7 +345,7 @@ int main() {
     /**** TEST TRANSFER FUNCTION ****/
     
     // Transfer from BA to CDA
-    cout << "\n*** Testing transfer from " << BA.getName() << " to " << CDA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << BA.getType() << " to " << CDA.getType() << " ***\n" << endl;
     cout << BA << endl;
     cout << CDA << endl;
     BA.transfer(CDA,50);
@@ -344,7 +354,7 @@ int main() {
     cout << CDA;
     
     // Transfer from CDA to BA
-    cout << "\n*** Testing transfer from " << CDA.getName() << " to " << BA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << CDA.getType() << " to " << BA.getType() << " ***\n" << endl;
     cout << CDA << endl;
     cout << BA << endl;
     CDA.transfer(BA,100);
@@ -353,7 +363,7 @@ int main() {
     cout << BA;    
 
     // Transfer from BA to MMA
-    cout << "\n*** Testing transfer from " << BA.getName() << " to " << MMA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << BA.getType() << " to " << MMA.getType() << " ***\n" << endl;
     cout << BA << endl;
     cout << MMA << endl;    
     BA.transfer(MMA,75);
@@ -362,7 +372,7 @@ int main() {
     cout << MMA;
     
     // Transfer from MMA to BA
-    cout << "\n*** Testing transfer from " << MMA.getName() << " to " << BA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << MMA.getType() << " to " << BA.getType() << " ***\n" << endl;
     cout << MMA << endl;
     cout << BA << endl;    
     MMA.transfer(BA,150);
@@ -371,7 +381,7 @@ int main() {
     cout << BA;    
     
     // Transfer from CDA to MMA
-    cout << "\n*** Testing transfer from " << CDA.getName() << " to " << MMA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << CDA.getType() << " to " << MMA.getType() << " ***\n" << endl;
     cout << CDA << endl;
     cout << MMA << endl;    
     CDA.transfer(MMA,175);
@@ -380,7 +390,7 @@ int main() {
     cout << MMA;
     
     // Transfer from MMA to CDA
-    cout << "\n*** Testing transfer from " << MMA.getName() << " to " << CDA.getName() << " ***\n" << endl;
+    cout << "\n*** Testing transfer from " << MMA.getType() << " to " << CDA.getType() << " ***\n" << endl;
     cout << MMA << endl;
     cout << CDA << endl;
     MMA.transfer(CDA,200);
